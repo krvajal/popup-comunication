@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Page Title</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+
+  <button onclick="openPopup()">Show popup</button>
+  <script>  
+
+    function getPopupOffset({ width, height }) {
+      const wLeft = window.screenLeft ? window.screenLeft : window.screenX;
+      const wTop = window.screenTop ? window.screenTop : window.screenY;
+
+      const left = wLeft + window.innerWidth / 2 - width / 2;
+      const top = wTop + window.innerHeight / 2 - height / 2;
+
+      return { top, left };
+    }
+
+    function getPopupSize() {
+      return { width: 1020, height: 618 };
+    }
+
+    function getPopupDimensions() {
+      const { width, height } = getPopupSize();
+      const { top, left } = getPopupOffset({ width, height });
+
+      return `width=${width},height=${height},top=${top},left=${left}`;
+    }
+
+    function openPopup() {
+      console.log("hi")
+      const url = "http://localhost:3000/popup"
+      const name = "Popup"
+      const popup = window.open(
+        url,
+        name,
+        `scrollbars=no,toolbar=no,location=no,titlebar=no,directories=no,status=no,menubar=no, ${getPopupDimensions()}`
+      );
+    }
+
+    (function(){
+        window.addEventListener('message', function onMessage(evt) {
+          if(evt.data.type === 'sign' ){
+            console.log(`Token: ${evt.data.token}`);
+          } 
+        })
+    })();
+  </script>
+</body>
+
+</html>
